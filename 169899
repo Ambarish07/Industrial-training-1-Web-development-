@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <link rel="stylesheet" type="text/css" href="css/style_login.css"> 
+
+
+        <title>!Target Page!</title>
+    </head>
+
+    <body>
+    <div class="topnav" >
+    <a><form action="show.php" method="POST" >
+    <input type="hidden" name="unames" value= "admin">
+    <button type="submit"  required >Home</button>
+    </form></a>
+    <a  href="info.php">Contact</a>
+    <a  class="active" href="#target">New Indicator</a>
+    <a href="home.html">Logout</a>
+    </div>
+<?php
+         //navigation bar
+         
+         
+       $date = date("dmy");
+     
+        $host = "localhost";
+        $user = "root";
+        $password = "";
+        $db = "original";
+  
+        //create connection
+        $conn = new mysqli( $host , $user , $password , $db);
+        if(mysqli_connect_error()){die("Connect Error");}
+        else{    
+        $users = mysqli_query($conn,"SELECT * from login_users where 1");
+        echo "<form action='update.php' class='form' method='POST' target='_blank'>";
+        echo "<h2 >NAME OF INDICATOR &ensp; <input type='text' placeholder='Title Of indicator' name='btitle' required></h2>";
+        echo "<input type='hidden' value='".$date."' name='md' required>";
+        echo "<h2 > Data Responsibility &ensp;&ensp;&ensp;&ensp;<select name='uname'></h2> ";
+        while($ROW = mysqli_fetch_array($users)) {
+            // echo $ROW; 
+           // echo $ROW['username'];
+            echo "<option  value='".$ROW['username']."'>".$ROW['username']."</option>";
+        }
+        echo "</select> <br><br>";
+        echo '<input type="radio" name="radio" value="on" > enabled&ensp;&ensp;&ensp;&ensp;&ensp;';
+        echo '<input type="radio" name="radio" value="off"> disabled<br><br>&ensp;';
+        echo "<button type='submit' action='update.php' target='_blank'>create</button>";
+        echo "</form>";}
+        echo "</table>";
+        
+            
+    
+?>
+       
