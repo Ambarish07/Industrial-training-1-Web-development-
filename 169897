@@ -1,0 +1,215 @@
+<?php
+  echo '<link rel="stylesheet" type="text/css" href="css/style_login.css">'; 
+  //echo "<h2>Connected</h1><br>";
+
+//include 'month_update.php';
+
+
+
+  
+  $uname = $_POST['unames'];
+  
+  
+
+ 
+
+    #code
+      $host = "localhost";
+      $user = "root";
+      $password = "";
+      $db = "original";
+  
+      //session_id($ROW['id']); session_start();$_SESSION['indicator']=$ROW['INDICATOR'] ;$_SESSION['radio']= $ROW['radio'];session_write_close();
+       //create connection
+        $conn = new mysqli( $host , $user , $password , $db);
+        if(mysqli_connect_error()){die("Connect Error");}
+        else{    
+        $month1 = mysqli_query($conn,"SELECT * from active_month  where 1");
+        $ROW2 = mysqli_fetch_assoc($month1);
+          $month= $ROW2["active_month"];
+         
+            if($uname != 'admin'){
+
+              //navigation bar
+              echo '
+              <div class="topnav" >
+              <a class="active" href="#home">Home</a>
+              <a href="info.php">Contact</a>
+              <a href="home.html">Logout</a>
+              <form align="right" action="excel.php" method="POST" >
+              <input type="hidden" name="unames" value= "'.$uname.'">
+              <button type="submit"  required >Export</button>
+              </form>
+              </div>
+            ';
+            
+            $RESULT = mysqli_query($conn,"SELECT * from books  where username = '$uname'"); //or die("failed".mysqli_error());
+            //$ROW = mysqli_fetch_array($RESULT);
+            //echo $ROW->num_rows();
+           
+           
+            echo "<table border = 1>";
+            echo"<tr> <td>ID</td> <td>INDICATOR</td>    <td>USERNAME</td><td>radio</td> <td> month no: ".$month. " value</td></tr>";
+            while($ROW = mysqli_fetch_assoc($RESULT)) {
+                 // echo $ROW;
+                  $row_ind = $ROW['INDICATOR'];
+                  $VALUE=mysqli_query($conn,"SELECT * from transaction where indicator=' $row_ind' AND month = '$month'  ");
+                  $ROW1=mysqli_fetch_assoc($VALUE);
+
+                  
+                  
+                  //session_id($ROW['id']); session_start();$_SESSION['indicator']=$ROW['INDICATOR'] ;$_SESSION['radio']= $ROW['radio'];session_write_close();
+
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<script>
+
+
+
+</script>
+<form id='01' action='transaction_update.php' method='POST'  >
+<tr> <td><?php echo $ROW['id'];?></td>  
+<td><?php echo $ROW['INDICATOR'];?></td>  
+<td><?php echo $ROW['USERNAME'];?></td> 
+<td><?php echo $ROW['radio'];?></button></td>
+<td> <h2 >  <input type='number' name='value' placeholder= '<?php echo $month;?>'></h2>
+<input type='hidden' name='unames' value= '<?php echo $uname;?>'>
+<input type='hidden' name='id' value= "<?php echo $ROW['id'];?>">
+<input type='hidden' name='indicator' value= "<?php echo $ROW['INDICATOR'];?>">
+<input type='hidden' name='radio' value= "<?php echo $ROW['radio'];?>">
+<input type='hidden' name='month' value= "<?php echo $month;?>">
+ <td><button type='submit'  required >Update</button></td></tr>
+</form>
+
+
+</body>
+</html>
+                                  
+<?php            
+
+                      
+    }
+  echo "</table>";
+                
+            
+            
+        }
+        
+          
+        else {
+
+                  //navigation bar
+                  echo '
+                  <div class="topnav">
+                  <a class="active" href="#home">Home</a>
+                  
+                  <a href="target.php">New Indicator</a>
+                  <a href="register.html" >New User</a>
+                  <a href="home.html">Logout</a>
+                  <form align="right" action="excel.php" method="POST" >
+                  <input type="hidden" name="unames" value= "'.$uname.'">
+                  <button type="submit"  required >Export</button>
+                  </form>
+              <form align="right" action="month_update.php" method="POST">
+              <input type="hidden" name="unames" value= "'.$uname.'">
+              active_month<input type="month" name="month" >
+              <button type="submit"  required >update</button>
+              </form>
+                  </div>
+                ';
+      
+
+          $RESULT = mysqli_query($conn,"SELECT * from books  where 1"); //or die("failed".mysqli_error());
+          //$ROW = mysqli_fetch_array($RESULT);
+          
+          
+
+          //echo $ROW->num_rows();
+          echo "<table border = 1>";
+          echo"<tr> <td>ID</td> <td>INDICATOR</td>   <td>USERNAME</td> <td> radio  </td><td> month no: ".$month. "</td></tr>";
+          while($ROW = mysqli_fetch_assoc($RESULT)) {
+          
+            //session_id($ROW['id']); session_start();$_SESSION['indicator']=$ROW['INDICATOR'] ;        $_SESSION['radio']= $ROW['radio'];session_write_close();
+
+          //get the enable and disable value
+          if($ROW['radio']=='off'){$ROW_radio_toggle = 'enable';}
+          else{$ROW_radio_toggle = 'disable';}
+
+          
+            // echo $ROW;
+?>            
+
+
+<!DOCTYPE html>
+<html lang="en">
+<body>
+
+
+
+<form id='01' action='transaction_update.php' method='POST' >
+<tr> <td><?php echo $ROW['id'];?></td>  
+<td><?php echo $ROW['INDICATOR'];?></td>  
+<td><?php echo $ROW['USERNAME'];?></td> 
+<td><?php echo $ROW['radio'];?></button></td>
+<td> <h2 >  <input type='number' name='value' placeholder= '<?php echo $month;?>'></h2>
+<input type='hidden' name='unames' value= '<?php echo $uname;?>'>
+<input type='hidden' name='id' value= "<?php echo $ROW['id'];?>">
+<input type='hidden' name='indicator' value= "<?php echo $ROW['INDICATOR'];?>">
+<input type='hidden' name='radio' value= "<?php echo $ROW['radio'];?>">
+<input type='hidden' name='month' value= "<?php echo $month;?>">
+ <td><button type='submit'  required >Update</button></td>
+</form>
+
+
+</body>
+</html>             
+
+
+<?php               
+               //hide the warnings
+               //error_reporting(E_ERROR | E_PARSE);
+               
+               
+               
+               
+              // session_id($ROW['id']); session_start();$_SESSION['indicator']=$ROW['INDICATOR'] ;  $_SESSION['radio']= $ROW['radio'];session_write_close();
+
+               //radio update
+               echo"</form>"; 
+               
+                 echo "<form  action='radio_update.php' method='POST' >";
+                 echo "<input type='hidden' name='unames' value= '".$uname."'>";
+                 echo "<input type='hidden' name='id' value= '".$ROW['id']."'>";
+                 echo " <input type='hidden' name='radio' value= '".$ROW['radio']."'>";
+                 echo "<td><button type = 'submit' onclick='radio()' >".$ROW_radio_toggle."</button></td></tr>" ;
+                 echo"</form>";
+                }
+          echo "</table>";
+
+              
+          } 
+      }
+
+
+
+
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" type="text/css" href="css/style_login.css">
+      <body>
+        <form id="id02"  action="transaction.php" method="POST" >
+ <div align = "right">
+ <input type="hidden" name="unames" value='<?php echo $uname ?>'>
+ <h2 > id <input type="number"  placeholder="Enter id " name="id"></h2>
+ <button type="submit" action="transaction.php" target="_blank">submit</button>
+ </div>
+ </form>
+ </body>
+</html>
+
+ 
