@@ -1,0 +1,50 @@
+<?php
+  echo "<h2>Connected</h1><br>";
+  $btitle=$_POST['btitle'];
+  $md=$_POST['md'];
+  $radio = $_POST['radio'];
+ echo $radio;
+ 
+   //session_start();
+   
+   $uname = $_POST['uname'];
+  
+   
+  
+  if( !empty($btitle) || !empty($md) ){
+     #code
+        $host = "localhost";
+        $user = "root";
+        $password = "";
+        $db = "original";
+  
+        //create connection
+        $conn = new mysqli( $host , $user , $password , $db);
+        if(mysqli_connect_error()){die("Connect Error");}
+        else{    
+            //prepare statement 
+           
+            //$SELECT = "SELECT title from books Where title = ? Limit 1";
+            $INSERT = "INSERT Into books (id,indicator,modified_date,username,radio) values (?,?,?,?,?)";
+           /* $stmt = $conn -> prepare($SELECT);
+            $stmt->bind_param("s",$btitle);
+            $stmt->execute();
+            $stmt->bind_result($btitle);
+            $stmt->store_result();
+            //$rnum = $stmt->num_rows();
+            $stmt->close();*/
+            $MAX = mysqli_query($conn,"SELECT max(id) FROM books ");
+            $row = mysqli_fetch_row($MAX);
+            $MAX1 = $row[0]+1;
+            echo $MAX1;
+            //if($rnum==0){
+                $stmt = $conn->prepare($INSERT);
+                $stmt->bind_param("isiss",$MAX1,$btitle,$md,$uname,$radio);
+                $stmt->execute();
+                echo "<h2>ADDED TO LIBRARY...</h2> ";
+           // }
+           //else{echo " <h2>RECORD ALREADY EXISTS...</h2>";}
+            }      
+    }
+    
+  ?>
