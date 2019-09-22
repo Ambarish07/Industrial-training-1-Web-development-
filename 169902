@@ -1,0 +1,69 @@
+<?php
+$id = $_POST['id'];
+echo "$id";
+$uname=$_POST['unames'];
+$indicator = $_POST['indicator'];
+$radio = $_POST['radio'];
+echo $radio;
+$value = $_POST['value'];
+$month = $_POST['month'];
+echo $month;
+//$month = date('m');
+#code
+ $host = "localhost";
+ $user = "root";
+ $password = "";
+ $db = "original";
+
+ //create connection
+ $conn = new mysqli( $host , $user , $password , $db);
+ if(mysqli_connect_error()){die("Connect Error");}
+ else if($radio == 'on'){
+    $SELECT = mysqli_query($conn,"SELECT * FROM transaction where indicator='$indicator' AND month='$month'");
+    $ROW = mysqli_fetch_assoc($SELECT);
+    
+    if($ROW==NULl){
+    $MAX = mysqli_query($conn,"SELECT max(id) FROM transaction ");
+    $row = mysqli_fetch_row($MAX);
+    $MAX1 = $row[0]+1;
+    echo $MAX1;
+
+    $sql = "INSERT INTO transaction (id,indicator,username,month,value) values('$MAX1','$indicator','$uname','$month','$value') ";
+    
+
+    if($conn->query($sql) === TRUE)
+    {
+        echo "<script>alert('RECORD INSERTED')</script>";
+        echo "<form id='01' action='show.php' method='POST' >";
+        echo "<input type='hidden' name= 'unames' value ='".$uname."' > ";
+        echo"</form>";
+        echo"<script> document.getElementById('01').submit(); </script>";
+    }
+}
+    
+    else if(mysqli_num_rows($SELECT)==1){
+        
+        $id1= $ROW['indicator'];
+        $month1=$ROW['month'];
+        $UPDATE = mysqli_query($conn,"UPDATE transaction SET value = '$value' where indicator = '$id1' and month = '$month' ");
+        echo "<script>alert('RECORD UPDATED ')</script>"; 
+        //redirect to show.php
+        echo "<form id='01' action='show.php' method='POST' >";
+        echo "<input type='hidden' name= 'unames' value ='".$uname."' > ";
+        echo"</form>";
+        echo"<script> document.getElementById('01').submit(); </script>";
+    }
+    else{echo "<script>alert('error while updating')</script>";
+        echo "<form id='01' action='show.php' method='POST' >";
+        echo "<input type='hidden' name= 'unames' value ='".$uname."' > ";
+        echo"</form>";
+        echo"<script> document.getElementById('01').submit(); </script>";
+    }
+    }else{echo'<script>alert("it is disabled")</script>';
+        echo "<form id='01' action='show.php' method='POST' >";
+        echo "<input type='hidden' name= 'unames' value ='".$uname."' > ";
+        echo"</form>";
+        echo"<script> document.getElementById('01').submit(); </script>";
+    }
+
+?>
