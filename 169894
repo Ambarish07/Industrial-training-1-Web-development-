@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link rel="stylesheet" type="text/css" href="css/style_login.css"> 
+
+
+</head>
+<body>
+<form action="register.php" method="POST"  target='_blank'>
+
+    <div id="id02" class="form" align = "center">
+     <h2 >First Name <input type="text" placeholder="Enter first name" name="fname" required></h2> 
+     <h2 >Username <input type="text" placeholder="Enter Username" name="uname" required></h2>
+     <h2 >Password <input type="password" placeholder="Enter Password" name="pass" required><br></h2>
+      <button type="submit"  action= "register.php" >Register</button>
+    </div>
+    </form>
+
+
+</body>
+
+</html>
